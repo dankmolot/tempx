@@ -46,7 +46,7 @@ LOG_LEVEL | `2` (info) | Logging level. See [loglevel](https://www.npmjs.com/pac
 UPLOAD_LIMIT | `5mb` | Maximum file upload limit. See [bytes](https://www.npmjs.com/package/bytes)
 
 ## API
-The API documentation is [here](The API documentation is here)
+The API documentation is [here](https://documenter.getpostman.com/view/16886665/TzseKSTh)
 
 # Contributing
 Pull requests are always welcome!
