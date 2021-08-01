@@ -15,6 +15,7 @@ Dockerfile
 
 # Other
 .git
+.github
 *.md
 *.txt
 LICENSE
