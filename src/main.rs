@@ -187,15 +187,19 @@ fn default(status: rocket::http::Status, _: &Request) -> json::Value {
 
 #[rocket::launch]
 fn rocket() -> _ {
-    let figment = rocket::Config::figment()
-        .join(AppConfig::default());
+    use rocket::figment::{Figment, Profile, providers::{Format, Toml, Env}};
+
+    let figment = Figment::from(rocket::Config::default())
+        .merge(AppConfig::default())
+        .merge(Toml::file("App.toml").nested())
+        .merge(Env::prefixed("APP_").global())
+        .select(Profile::from_env_or("APP_PROFILE", "default"));
  
-    rocket::custom(figment)
-        .attach(FileDatabase::stage())
-        .attach(Deleter::stage())
-        .mount("/", routes![index, upload, upload_with_id, download, download_by_path, delete])
-        .register("/", catchers![default])
-        .attach(rocket::fairing::AdHoc::config::<AppConfig>())
+    rocket::custom(figment) // Using our custom figment configuration.
+        .attach(FileDatabase::stage()) // Adding FileDatabase hooks
+        .attach(Deleter::stage()) // Adding Deleter hooks
+        .mount("/", routes![index, upload, upload_with_id, download, download_by_path, delete]) // Adding routes
+        .register("/", catchers![default]) // Registering status to json handler
         .attach(rocket::fairing::AdHoc::on_liftoff("Welcome Message", |rocket| Box::pin(async {
             let app_config: AppConfig = rocket.figment().extract().expect("invalid config");
             let config: rocket::Config = rocket.figment().extract().expect("Invalid conifg");
