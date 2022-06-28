@@ -6,7 +6,7 @@ use std::sync::{Arc, Weak, Mutex, Condvar};
 use std::time::{Duration, Instant};
 use std::collections::HashMap;
 
-use crate::file_database::{FileDatabaseRef, SharedStoredFile, FileID, StoredFile};
+use crate::file_database::{FileDatabaseRef, FileID};
 
 struct SchecludedDelete {
     created: Instant,

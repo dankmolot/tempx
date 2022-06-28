@@ -1,15 +1,11 @@
 use dashmap::DashMap;
 use rocket::fairing::{AdHoc};
 use rocket::serde::uuid::Uuid;
-use rocket::request::{self, Request, FromRequest};
 use rocket::State;
 use rocket::http::ContentType;
 use rocket::fs::TempFile;
-use std::path::{PathBuf};
-use std::sync::{Arc, Weak};
-use rocket::tokio::sync::RwLock;
+use std::sync::{Arc};
 use rocket::fs::NamedFile;
-use rocket::tokio::time::{Duration, sleep};
 use std::io::{Error, ErrorKind};
 
 use crate::utils::uuid4;
@@ -40,7 +36,6 @@ pub type SharedStoredFile = Arc<StoredFile>;
 
 pub struct FileDatabase {
     pub files: DashMap<FileID, SharedStoredFile>,
-    me: Weak<FileDatabase>,
 }
 
 pub type FileDatabaseRef = Arc<FileDatabase>;
@@ -49,16 +44,9 @@ pub type FileDatabaseState<'a> = &'a State<FileDatabaseRef>;
 impl FileDatabase {
     // Creates new instance of FileDatabase
     fn new() -> FileDatabaseRef {
-        Arc::new_cyclic(|me| {
-            FileDatabase {
-                files: DashMap::new(),
-                me: me.clone(),
-            }
+        Arc::new(FileDatabase {
+            files: DashMap::new(),
         })
-    }
-
-    fn me(&self) -> FileDatabaseRef {
-        self.me.upgrade().unwrap()
     }
 
     async fn create_stored_file(&self, id: Uuid, path: String, content_type: Option<ContentType>) -> Result<(), std::io::Error> {
