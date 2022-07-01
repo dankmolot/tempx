@@ -19,7 +19,7 @@ $ docker run -p 3000:3000 dankmolot/tempx
 ```
 
 or with docker compose:
-```
+```yml
 version: "3.9"
 
 services:
@@ -39,7 +39,7 @@ You can also see documentation at [source code](src/main.rs#L26)
 
 # Configuration
 You can configure server with enviroment variables
-```
+```shell
 APP_PORT=3000
 APP_DEFAULT_EXPIRE=1m
 APP_MAX_EXPIRE=10m
