@@ -42,7 +42,7 @@ fn index() -> &'static str {
             Downloads file. Returns 404 if file not found.
             Also, adds Content-Type same as were uploaded.
 
-        GET /file<id>.<ext>
+        GET /file/<id>.<ext>
             Same as request as ahead, but sets Content-Type same as extension specified in url.
             Example: if <ext> is .json, then Content-Type will be application/json
 
