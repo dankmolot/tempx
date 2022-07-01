@@ -1,17 +1,14 @@
-FROM node:14-alpine
+FROM rust:alpine as builder
 
-# Create app directory
 WORKDIR /app
+RUN apk add --no-cache musl-dev libc6-compat
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json .
-
-RUN npm ci
-
-# Bundle app source
 COPY . .
+RUN cargo build --release
 
-EXPOSE 8080
-CMD [ "node", "index.js" ]
+FROM scratch
+WORKDIR /app
+COPY --from=builder /app/target/release/tempx /app/tempx
+
+EXPOSE 3000
+ENTRYPOINT ["/app/tempx"]
