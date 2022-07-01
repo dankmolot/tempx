@@ -1,5 +1,7 @@
 use rocket::serde::{Deserialize, Serialize};
 use crate::ms::Ms;
+use std::net::IpAddr;
+use std::str::FromStr;
 use std::time::Duration;
 use rocket::figment::{self, Provider, Error, Profile};
 use rocket::data::{Limits, ToByteUnit};
@@ -13,6 +15,7 @@ pub struct AppConfig {
     pub max_expire: Ms,
     pub port: u16,
     pub limits: Limits,
+    pub address: IpAddr
 }
 
 impl Default for AppConfig {
@@ -23,7 +26,8 @@ impl Default for AppConfig {
 
             // Here we rewrite default settings, it only works properly only here.
             port: 3000,
-            limits: Limits::new().limit("file", 10.mebibytes())
+            limits: Limits::new().limit("file", 10.mebibytes()),
+            address: IpAddr::from_str("0.0.0.0").unwrap()
         }
     }
 }
