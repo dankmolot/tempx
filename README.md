@@ -10,6 +10,27 @@ So i wrote this small application to store this files, and get them.
 * Secure uploaded file with random access key
 * Rate limit
 * Automated builds
+* Frontend page
+
+# Docker
+You can deploy TempX with docker, just run:
+```shell
+$ docker run -p 3000:3000 dankmolot/tempx
+```
+
+or with docker compose:
+```
+version: "3.9"
+
+services:
+  tempx:
+    image: dankmolot/tempx
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+```
+
+Configuration file `App.toml` should be placed at `/app/App.toml`
 
 # Documentation
 When you deploy TempX, you can access index page http://localhost:3000/, to see documentation.
